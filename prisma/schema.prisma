@@ -1,0 +1,51 @@
+// Prisma şema dosyası
+// Veritabanı: SQLite — basit kurulum, tek dosya (dev.db)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Ürün: menüde gösterilen pizza, yan ürün, içecek vb.
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String // Ürün adı
+  description String // Açıklama
+  price       Float // Fiyat (TL)
+  category    String // Kategori: "Pizzalar", "Yan Ürünler", "İçecekler", "Tatlılar"
+  imageUrl    String? // Görsel URL (opsiyonel)
+  createdAt   DateTime    @default(now())
+  orderItems  OrderItem[] // Bu ürünü içeren sipariş kalemleri
+}
+
+// Sipariş: bir müşterinin verdiği sipariş (başlık bilgileri)
+model Order {
+  id           Int         @id @default(autoincrement())
+  customerName String // Müşteri adı soyadı
+  phone        String // Telefon
+  address      String // Teslimat adresi
+  note         String? // Sipariş notu (opsiyonel)
+  total        Float // Toplam tutar (TL)
+  paymentMethod String     @default("Kart") // "Kart" | "Kapıda Nakit" | "Kapıda Kart"
+  paid         Boolean     @default(false) // Ödeme alındı mı? (online kartta otomatik true)
+  status       String      @default("Yeni") // "Yeni" | "Hazırlanıyor" | "Yolda" | "Teslim Edildi"
+  createdAt    DateTime    @default(now())
+  items        OrderItem[] // Sipariş kalemleri
+}
+
+// Sipariş kalemi: bir siparişte yer alan tek bir ürün satırı
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int // Adet
+  price     Float // Sipariş anındaki birim fiyat (TL)
+  // İsim de saklanır ki ürün silinse bile sipariş geçmişi okunabilir kalsın
+  name      String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}

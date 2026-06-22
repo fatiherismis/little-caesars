@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+build
+
+# Ortam değişkenleri
+.env
+
+# Prisma SQLite veritabanı dosyaları
+prisma/dev.db
+prisma/dev.db-journal
+*.db
+*.db-journal
+
+# Yüklenen ürün görselleri (klasör korunur, içerik yoksayılır)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# Çeşitli
+.DS_Store
+npm-debug.log*
