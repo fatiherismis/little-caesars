@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "node prisma/seed.js",
-    "db:reset": "prisma migrate reset --force"
+    "db:push": "prisma db push",
+    "db:reset": "prisma db push --force-reset && npm run seed"
   },
   "prisma": {
     "seed": "node prisma/seed.js"

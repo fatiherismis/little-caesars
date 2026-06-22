@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.local
+*.db
+*.db-journal
+prisma/dev.db
+prisma/dev.db-journal
+public/uploads/*
+!public/uploads/.gitkeep
+npm-debug.log*
+.DS_Store
+README.md
+DOKPLOY.md

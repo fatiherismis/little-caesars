@@ -47,7 +47,7 @@ npm install
 ```
 
 ### 3. Ortam değişkenleri
-Proje kök dizininde `.env` dosyası zaten mevcuttur. Gerekirse `.env.example` dosyasını kopyalayıp düzenleyebilirsiniz:
+`.env` dosyası proje kök dizininde mevcuttur. Gerekirse `.env.example` dosyasını kopyalayabilirsiniz:
 ```bash
 cp .env.example .env
 ```
@@ -60,11 +60,11 @@ ADMIN_SECRET="degistir-bu-gizli-anahtari-uretimde"
 ```
 > ⚠️ Üretim ortamında `ADMIN_PASSWORD` ve `ADMIN_SECRET` değerlerini mutlaka değiştirin.
 
-### 4. Veritabanını oluştur (migration)
+### 4. Veritabanı tablolarını oluştur
 ```bash
-npx prisma migrate dev --name init
+npm run db:push
 ```
-Bu komut SQLite veritabanını (`prisma/dev.db`) oluşturur ve Prisma Client'ı üretir.
+Bu komut Prisma şemasını SQLite veritabanına (`prisma/dev.db`) uygular ve Prisma Client'ı üretir.
 
 ### 5. Örnek verileri yükle (seed)
 ```bash
@@ -124,15 +124,16 @@ npm start
 - **Order** — `id, customerName, phone, address, note, total, paymentMethod, paid, status, createdAt`
 - **OrderItem** — `id, orderId, productId, name, price, quantity`
 
-> Not: Daha önce kurduysanız `paymentMethod` ve `paid` alanları ile "Yolda" durumu eklendiği için veritabanını güncelleyin: `npx prisma migrate dev` (veya sıfırlamak için `npm run db:reset`).
+> Not: Şema değiştiğinde tabloları güncellemek için `npm run db:push` çalıştırın (Prisma Client'ı da yeniden üretir; sıfırlamak için `npm run db:reset`).
 
 ## 🔧 Yararlı Komutlar
 
 | Komut | Açıklama |
 |-------|----------|
 | `npm run dev` | Geliştirme sunucusu |
-| `npm run build` | Üretim derlemesi |
+| `npm run build` | Prisma Client üret + üretim derlemesi |
 | `npm start` | Üretim sunucusu |
+| `npm run db:push` | Şemayı veritabanına uygula |
 | `npm run seed` | Örnek verileri yükle |
 | `npm run db:reset` | Veritabanını sıfırla + yeniden seed |
 | `npx prisma studio` | Veritabanını tarayıcıda görüntüle |
@@ -141,7 +142,6 @@ npm start
 - Para birimi **TL** olarak biçimlendirilir (`Intl.NumberFormat`, `tr-TR`).
 - Sipariş toplamı, güvenlik için istemciden değil **sunucuda veritabanı fiyatlarından** hesaplanır.
 - Sepet verisi tarayıcıda saklanır; sunucuya yalnızca sipariş tamamlanınca gönderilir.
-- Yüklenen ürün görselleri `public/uploads/` klasörüne kaydedilir (en fazla 5 MB; JPG/PNG/WEBP/GIF).
-- Ödeme akışı **demo/mock**'tur; gerçek tahsilat yapılmaz ve kart bilgileri saklanmaz/sunucuya gönderilmez.
-- `next/font` ilk derlemede yazı tiplerini Google Fonts'tan indirir; ilk `build`/`dev` için internet gerekir.
-# pizza
+- Bilgisayardan yüklenen ürün görselleri `public/uploads/` klasörüne kaydedilir (en fazla 5 MB; JPG/PNG/WEBP/GIF).
+- Ödeme akışı gösterim amaçlıdır; gerçek tahsilat yapılmaz ve kart bilgileri saklanmaz/sunucuya gönderilmez.
+- `next/font` derlemede yazı tiplerini Google Fonts'tan indirir; build için internet gerekir.
